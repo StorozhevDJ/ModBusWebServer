@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>User Info</title>
+<link rel="stylesheet" th:href="@{/css/topmenu.css}" />
+<th:block th:include="/_head"></th:block>
+<script th:inline="javascript">var path = "[(@{/})]";</script>
+<script type="text/javascript" th:src="@{/js/device.js}"></script>
+</head>
+<body class="page">
+	<div id="wrap">
+		<!-- Include _menu.html -->
+		<th:block th:include="/_menu"></th:block>
+		<div class="page-headline">Сводная страница об устройствах в
+			системе</div>
+		<div id="main">
+
+			<div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
+<br />
+			<div th:if="${admin != null}">Права администратора доступны</div>
+		</div>
+
+		<h3>
+			Устройства в базе
+		</h3>
+		<table border="1">
+			<tr>
+				<th>Адрес</th>
+				<th>Тип</th>
+				<th>Серийный номер</th>
+				<th>Комментарий</th>
+				<th th:if="${admin != null}"> </th>
+			</tr>
+			<tr th:each="deviceInfo : ${deviceInfos}" th:id="${deviceInfo.devId}">
+				<td th:utext="${deviceInfo.address}">..</td>
+				<td th:utext="${deviceInfo.type}">..</td>
+				<td th:utext="${deviceInfo.serial}">..</td>
+				<td th:utext="${deviceInfo.comment}">..</td>
+				<td th:if="${admin != null}"  >
+					<button th:onclick="'DeleteDevice(' + ${deviceInfo.devId} + ');'">Удалить</button>
+				</td>
+			</tr>
+		</table>
+		
+		
+
+		<h3>
+			Поиск устройств в сети ModBus
+		</h3>
+		<table border="1">
+			<tr>
+				<th>Адрес</th>
+				<th>Тип устройства</th>
+				<th>Серийный номер</th>
+				<th>Комментарий</th>
+			</tr>
+			<tbody class="results"></tbody>
+		</table>
+
+		Порт: 
+		<select name="ports" id="selected_port">
+		  <option th:each="type : ${ports}"
+		          th:value="${ports}"
+		          th:text="${type}">Select port</option>
+		</select>
+		Адреса:
+		<input type="number" id='search_from' min="1" max="247" value="1"> - 
+		<input type="number" id='search_to' min="1" max="247" value="200">
+		<input type='button' id='but_search' value='Поиск'>
+
+		<!-- Image loader -->
+		<div id='loader' style='display: none;'>
+			<span id="findDevNum"></span>
+			<img th:src="@{/images/animationProcessing.gif}">
+		</div>
+		<!-- Image loader -->
+
+		<th:block th:include="/_footer"></th:block>
+	</div>
+	<!--end wrap-->
+</body>
+
+</html>

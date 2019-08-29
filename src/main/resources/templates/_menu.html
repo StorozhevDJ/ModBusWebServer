@@ -1,0 +1,17 @@
+
+<div xmlns:th="http://www.thymeleaf.org" id="header">
+	<img th:src="@{images/logo.png}" />
+	<div id="nav">
+		<ul class="menu">
+			<li><a th:href="@{/}">Home</a></li>
+			<li><a th:href="@{/devInfo}">Устройства</a>
+				<ul class="sub-menu">
+					<li><a th:href="@{/devMLP}">МЛП</a></li>
+					<li><a th:href="@{/devSKCT}">СКЦТ</a></li>
+				</ul></li>
+			<li><a th:href="@{/logout}">Выйти</a></li>
+		</ul>
+	</div>
+	<!--end nav-->
+</div>
+

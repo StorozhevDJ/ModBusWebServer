@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:utext="${title}"></title>
+<link rel="stylesheet" th:href="@{/css/topmenu.css}" />
+<th:block th:include="/_head"></th:block>
+</head>
+
+<body class="page">
+	<div id="wrap">
+		<!-- Include _menu.html -->
+		<th:block th:include="/_menu"></th:block>
+		<div class="page-headline">Система ...</div>
+		<div id="main">
+			<h1>
+				Message : <span th:utext="${message}"></span>
+			</h1>
+			<h3>
+				Добро пожаловать : <span th:utext="${#request.userPrincipal.name}"></span>
+			</h3>
+		</div>
+		<th:block th:include="/_footer"></th:block>
+	</div>
+	<!--end wrap-->
+</body>
+</html>

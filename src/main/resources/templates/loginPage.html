@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Login</title>
+<link rel="stylesheet" th:href="@{/css/login.css}" />
+
+</head>
+<body class="page">
+	<div id="wrap">
+
+		<!-- /login?error=true -->
+		<div th:if="${#request.getParameter('error') == 'true'}"
+			style="color: red; margin: 10px 0px;">
+			Login Failed!!!<br /> Reason : <span
+				th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
+				th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
+				Static summary </span>
+
+		</div>
+
+		<h3 style="text-align: center;">Введите имя пользователя и
+			пароль:</h3>
+
+		<div class="login">
+			<form name='f' th:action="@{/j_spring_security_check}" method='POST'>
+				<input type='text' placeholder="Имя пользователя" name='username'
+					value=''> <input type='password' placeholder="Пароль"
+					name='password' /> <input name="submit" type="submit"
+					value="Войти" />
+			</form>
+		</div>
+		<div class="shadow"></div>
+
+		<br> Username/pass:
+		<ul>
+			<li>dbuser1/123</li>
+			<li>dbadmin1/123</li>
+		</ul>
+		<th:block th:include="/_footer"></th:block>
+	</div>
+	<!--end wrap-->
+</body>
+
+</html>
