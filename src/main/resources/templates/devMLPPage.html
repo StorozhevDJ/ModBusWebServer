@@ -3,9 +3,28 @@
 <head>
 <title>User Info</title>
 <link rel="stylesheet" th:href="@{/css/topmenu.css}" />
+
+<!-- link rel="stylesheet" th:href="@{/css/daterangepicker.min.css}"-->
+<link rel="stylesheet" th:href="@{/jquery/jquery-ui.min.css}">
 <th:block th:include="/_head"></th:block>
 <script th:inline="javascript">var path = "[(@{/})]";</script>
+<script type="text/javascript" th:src="@{/jquery/jquery-ui.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/device.js}"></script>
+<script type="text/javascript" th:src="@{/js/datepicker.js}"></script>
+<script type="text/javascript" th:src="@{/jquery/ui/i18n/datepicker-ru.js}"></script>
+
+
+    <!-- link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css"-->
+    <style type="text/css">
+        input {width: 200px; text-align: left}
+    </style> 
+
+    <script type="text/javascript">
+
+
+
+    </script> 
+
 </head>
 <body class="page">
 	<div id="wrap">
@@ -13,6 +32,9 @@
 		<th:block th:include="/_menu"></th:block>
 <div class="page-headline">Страница МЛП устройств</div>
 		<div id="main">
+
+
+    
 
 		<h3>
 			Welcome : <span th:utext="${#request.userPrincipal.name}"></span>
@@ -27,15 +49,15 @@
 				<th>Тип</th>
 				<th>Серийный номер</th>
 				<th>Комментарий</th>
-				<th th:if="${admin != null}"> </th>
+				<th> </th>
 			</tr>
 			<tr th:each="deviceInfo : ${deviceInfos}" th:id="${deviceInfo.serial}">
 				<td th:utext="${deviceInfo.address}">..</td>
 				<td th:utext="${deviceInfo.type}">..</td>
 				<td th:utext="${deviceInfo.serial}">..</td>
 				<td th:utext="${deviceInfo.comment}">..</td>
-				<td th:if="${admin != null}"  >
-					<button th:onclick="'DeleteDevice(' + ${deviceInfo.serial} + ');'">Удалить</button>
+				<td>
+					<button th:if="${admin != null}" th:onclick="'DeleteDevice(' + ${deviceInfo.serial} + ');'">Удалить</button>
 					<button th:onclick="'getMLPData(' + ${deviceInfo.serial} + ');'">Данные</button>
 				</td>
 			</tr>
@@ -44,6 +66,14 @@
 		<h3>
 			Архив данных
 		</h3>
+		Диапазон дат:
+		<form>
+			<div class="ui-widget">
+				<label for="dateFrom">От </label><input id="dateFrom" value=""/>
+				<label for="dateTo"> до </label><input id="dateTo"/>
+			</div>
+		</form>
+
 		<table border="1">
 			<tr>
 				<th>Дата/время</th>

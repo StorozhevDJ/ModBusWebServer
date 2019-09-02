@@ -126,6 +126,8 @@ function getMLPData(devId) {
 	$.ajax({
 		dataType : 'json',
 		url : path + 'data/mlp/'+devId,
+		data: { from: $('#dateFrom').val(), to: $('#dateTo').val() },
+		//data: { from: "2019-08-22", to: "2019-09-01" },
 		beforeSend : function() {
 			// Show image container
 			$("#loader").show();

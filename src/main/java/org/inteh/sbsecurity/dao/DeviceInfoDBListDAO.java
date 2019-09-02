@@ -148,26 +148,4 @@ public class DeviceInfoDBListDAO extends JdbcDaoSupport {
 
 }
 
-/**
- * MyDatabase table CREATE TABLE `mydatabase`.`devices` ( `id` INT NOT NULL
- * AUTO_INCREMENT, `address` SMALLINT NOT NULL, `type` SMALLINT NOT NULL,
- * `serial` SMALLINT NOT NULL, `baudrate` INT NULL, `hw_ver` SMALLINT NULL,
- * `fw_ver` SMALLINT NULL, `mfg_year` SMALLINT NULL, `min_voltage` SMALLINT
- * NULL, `max_voltage` SMALLINT NULL, `current` SMALLINT NULL, `comment`
- * VARCHAR(32) NULL, `enabled` TINYINT NULL, UNIQUE INDEX `id_UNIQUE` (`id`
- * ASC), PRIMARY KEY (`id`));
- * 
- * CREATE TABLE `mydatabase`.`mlp_data` ( `id` INT UNSIGNED NULL AUTO_INCREMENT,
- * `dev_id` INT UNSIGNED NOT NULL, `date_time` TIMESTAMP NULL, `anglex` SMALLINT
- * UNSIGNED NULL, `angley` SMALLINT UNSIGNED NULL, `anglez` SMALLINT UNSIGNED
- * NULL, `accel` SMALLINT UNSIGNED NULL, `anglemx` SMALLINT UNSIGNED NULL,
- * `anglemy` SMALLINT UNSIGNED NULL, `anglemz` SMALLINT UNSIGNED NULL, `mag`
- * SMALLINT UNSIGNED NULL, `tempcase` SMALLINT UNSIGNED NULL, `tempaccel`
- * SMALLINT UNSIGNED NULL, `state` SMALLINT UNSIGNED NULL, `test` SMALLINT
- * UNSIGNED NULL, PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC));
- * 
- * INSERT INTO `mydatabase`.`devices` (`id`, `address`, `type`, `serial`,
- * `baudrate`, `hw_ver`, `fw_ver`, `mfg_year`, `min_voltage`, `max_voltage`,
- * `current`) VALUES ('3', '11', '150', '5', '9600', '10', '10', '2019', '5',
- * '24', '30');
- */
+
