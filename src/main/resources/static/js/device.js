@@ -54,17 +54,19 @@ $(document).ready(function() {
 					 * $('.results').append(tr); }
 					 */
 					if (jsondata != null) {
-						tr = $('<tr/>');
+						tr = $('<tr>');
 						tr.append("<td>" + jsondata.address + "</td>");
 						tr.append("<td>" + jsondata.type + "</td>");
 						tr.append("<td>" + jsondata.serial + "</td>");
 						tr.append("<td>" + jsondata.comment + "</td>");
+						tr.append("<td><img src='" + path + "images/savetodb.png' onclick='addDevice(" + jsondata.address + ", \"" + $("#selected_port option:selected").text() + "\");' title='Добавить устройство в БД'></td>");
+						tr.append("</tr>");
 						$('.results').append(tr);
 					}
 				},
 				error : function(request, error) {
 					console.log(arguments);
-					alert(" Error: " + error);
+					//alert(" Error: " + error);
 				},
 				complete : function(data) {
 					if (n < $('#search_to').val()) {
@@ -80,8 +82,6 @@ $(document).ready(function() {
 			
 		}
 	});
-	
-	
 	
 
 		
@@ -100,7 +100,7 @@ function DeleteDevice (devId) {
 			$.ajax({
 				dataType : 'json',
 				type: 'DELETE',
-				url : path + 'device/' + devId + '/',
+				url : path + 'device/' + devId,
 				success : function(jsondata) {
 					$('#'+devId).remove();
 				},
@@ -115,6 +115,59 @@ function DeleteDevice (devId) {
 		}
 	}
 	
+
+/**
+ * Add or Update Device in DataBase
+ * @param devId
+ * @returns
+ */
+function updateDevice (devId) {
+	if (confirm("Удалить устройство из базы данных?")){
+			$.ajax({
+				dataType : 'json',
+				type: 'DELETE',
+				url : path + 'device/' + devId + '/',
+				success : function(jsondata) {
+					//$('#'+devId).remove();
+					
+				},
+				error : function(request, error) {
+					console.log(arguments);
+					alert(" Error: " + error);
+				},
+				complete : function(data) {
+					
+				}
+			});
+		}
+	}
+
+/**
+ * Add Device into DataBase
+ * @param devId
+ * @returns
+ */
+function addDevice (devId, devPort) {
+	if (confirm("Добавить найденное устройство в базу данных?")){
+			$.ajax({
+				dataType : 'json',
+				type: 'POST',
+				url : path + 'device/search/' + devPort + '/' + devId + '/',
+				//data: { from: $('#dateFrom').val(), to: $('#dateTo').val() },
+				success : function(jsondata) {
+					//$('#'+devId).remove();
+					alert("Успешно");
+				},
+				error : function(request, error) {
+					console.log(arguments);
+					alert(" Error: " + error);
+				},
+				complete : function(data) {
+					alert("Добавлено");
+				}
+			});
+		}
+	}
 
 
 /**
@@ -137,11 +190,11 @@ function getMLPData(devId) {
 			//for (jsondata != null) {
 			jsondatas.forEach(function(jsondata) {
 				tr = $('<tr/>');
-				tr.append("<td>" + jsondata.dateTime + "</td>");
+				tr.append("<td>" + jsondata.date + "</td>");
 				tr.append("<td>" + jsondata.accel/10000 + "</td>");
-				tr.append("<td>" + jsondata.angleAXDeg + "</td>");
-				tr.append("<td>" + jsondata.angleAYDeg + "</td>");
-				tr.append("<td>" + jsondata.angleAZDeg + "</td>");
+				tr.append("<td>" + jsondata.ax + "</td>");
+				tr.append("<td>" + jsondata.ay + "</td>");
+				tr.append("<td>" + jsondata.az + "</td>");
 				tr.append("<td>" + jsondata.tempCase/100 + "</td>");
 				$('.mlpdata').append(tr);
 			});

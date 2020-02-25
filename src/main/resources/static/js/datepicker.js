@@ -3,13 +3,13 @@ $(function() {
 	
     $('#dateFrom').datepicker({
         constrainInput: true,
-        minDate: "-1m",
+        //minDate: "-1m",
         maxDate: "0",
         dateFormat: 'yy-mm-dd',
 	});
     $('#dateTo').datepicker({
         constrainInput: true,
-        minDate: "-1m",
+        //minDate: "-1m",
         maxDate: "0",
         dateFormat: 'yy-mm-dd',
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>User Info</title>
+<title>МЛП</title>
 <link rel="stylesheet" th:href="@{/css/topmenu.css}" />
 
 <!-- link rel="stylesheet" th:href="@{/css/daterangepicker.min.css}"-->
@@ -51,14 +51,14 @@
 				<th>Комментарий</th>
 				<th> </th>
 			</tr>
-			<tr th:each="deviceInfo : ${deviceInfos}" th:id="${deviceInfo.serial}">
+			<tr th:each="deviceInfo : ${deviceInfos}" th:id="${deviceInfo.devId}">
 				<td th:utext="${deviceInfo.address}">..</td>
 				<td th:utext="${deviceInfo.type}">..</td>
 				<td th:utext="${deviceInfo.serial}">..</td>
 				<td th:utext="${deviceInfo.comment}">..</td>
 				<td>
-					<button th:if="${admin != null}" th:onclick="'DeleteDevice(' + ${deviceInfo.serial} + ');'">Удалить</button>
-					<button th:onclick="'getMLPData(' + ${deviceInfo.serial} + ');'">Данные</button>
+					<img th:if="${admin != null}" th:src="@{/images/deletefromdb.png}" th:onclick="'DeleteDevice(' + ${deviceInfo.devId} + ');'" title='Удалить из БД'>
+					<button th:onclick="'getMLPData(' + ${deviceInfo.devId} + ');'">Данные</button>
 				</td>
 			</tr>
 		</table>

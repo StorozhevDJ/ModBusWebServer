@@ -1,14 +1,14 @@
-
 -- Create DataBase
-
-CREATE DATABASE  IF NOT EXISTS `mydatabase` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `mydatabase`;
+DROP DATABASE IF EXISTS `modbuslogger`;
+CREATE DATABASE  `modbuslogger` DEFAULT CHARACTER SET utf8mb4;
+USE `modbuslogger`;
 -- MySQL dump 10.16  Distrib 10.1.37-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mydatabase
 -- ------------------------------------------------------
 -- Server version	10.1.37-MariaDB-0+deb9u1
 
+-- User data tables
 
 --
 -- Table structure for table `App_Role`
@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `App_Role` (
   PRIMARY KEY (`ROLE_ID`),
   UNIQUE KEY `APP_ROLE_UK` (`ROLE_NAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Table structure for table `App_User`
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `App_User` (
   UNIQUE KEY `APP_USER_UK` (`USER_NAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+  
 --
 -- Table structure for table `Persistent_Logins`
 --
@@ -57,118 +58,59 @@ CREATE TABLE IF NOT EXISTS `User_Role` (
   KEY `USER_ROLE_FK2` (`ROLE_ID`),
   CONSTRAINT `USER_ROLE_FK1` FOREIGN KEY (`USER_ID`) REFERENCES `App_User` (`USER_ID`),
   CONSTRAINT `USER_ROLE_FK2` FOREIGN KEY (`ROLE_ID`) REFERENCES `App_Role` (`ROLE_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
-
+  
+-- ------------------------------------------------------
+-- Device data tables
+--
 --
 -- Table structure for table `devices`
 --
 CREATE TABLE IF NOT EXISTS `devices` (
-  `devId` int(11) NOT NULL AUTO_INCREMENT,
-  `address` smallint(6) NOT NULL,
-  `type` smallint(6) NOT NULL,
-  `serial` smallint(6) NOT NULL,
-  `baudrate` int(11) DEFAULT NULL,
-  `hw_ver` smallint(6) DEFAULT NULL,
-  `fw_ver` smallint(6) DEFAULT NULL,
-  `mfg_year` smallint(6) DEFAULT NULL,
-  `min_voltage` smallint(6) DEFAULT NULL,
-  `max_voltage` smallint(6) DEFAULT NULL,
-  `current` smallint(6) DEFAULT NULL,
-  `comment` varchar(32) DEFAULT NULL,
-  `enabled` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`devId`),
-  UNIQUE KEY `id_UNIQUE` (`devId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `address` SMALLINT(6) NOT NULL,		-- ModBus device address
+  `type` SMALLINT(6) NOT NULL,		-- Device type (MLP = 150)
+  `serial` SMALLINT(6) NOT NULL,		-- Device serial number
+  `baudrate` INT(11) DEFAULT NULL,		-- RS485 Baudrate
+  `hw_ver` SMALLINT(6) DEFAULT NULL,	-- Device Hardvare version
+  `fw_ver` SMALLINT(6) DEFAULT NULL,	-- Device Firmware version
+  `mfg_year` SMALLINT(6) DEFAULT NULL,	-- Devise manufacture year
+  `min_voltage` SMALLINT(6) DEFAULT NULL,-- Device Min voltage value
+  `max_voltage` SMALLINT(6) DEFAULT NULL,-- Device Max voltage value
+  `current` SMALLINT(6) DEFAULT NULL,	-- Device Current consumption value
+  `comment` VARCHAR(32) DEFAULT NULL,	-- Device comments string
+  `enabled` TINYINT(4) DEFAULT NULL,	-- Enabled flag
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`serial`, `type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Table structure for table `mlp_data`
 --
 CREATE TABLE IF NOT EXISTS `mlp_data` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `dev_id` int(10) unsigned NOT NULL,
-  `date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `anglex` smallint(5) DEFAULT NULL,
-  `angley` smallint(5) DEFAULT NULL,
-  `anglez` smallint(5) DEFAULT NULL,
-  `accel` smallint(5) unsigned DEFAULT NULL,
-  `anglemx` smallint(5) DEFAULT NULL,
-  `anglemy` smallint(5) DEFAULT NULL,
-  `anglemz` smallint(5) DEFAULT NULL,
-  `mag` smallint(5) unsigned DEFAULT NULL,
-  `tempcase` smallint(5) DEFAULT NULL,
-  `tempaccel` smallint(5) DEFAULT NULL,
-  `state` smallint(5) unsigned DEFAULT NULL,
-  `test` smallint(5) unsigned DEFAULT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `devId` INT(10) unsigned NOT NULL,	-- Device ID from "device" table
+  `date_time` DATETIME NOT NULL,	-- Date/time read device data
+  `anglex` SMALLINT DEFAULT NULL,
+  `angley` SMALLINT DEFAULT NULL,
+  `anglez` SMALLINT DEFAULT NULL,
+  `accel` SMALLINT unsigned DEFAULT NULL,
+  `anglemx` SMALLINT DEFAULT NULL,
+  `anglemy` SMALLINT DEFAULT NULL,
+  `anglemz` SMALLINT DEFAULT NULL,
+  `mag` SMALLINT unsigned DEFAULT NULL,
+  `tempcase` SMALLINT DEFAULT NULL,
+  `tempaccel` SMALLINT DEFAULT NULL,
+  `state` SMALLINT unsigned DEFAULT NULL,
+  `test` SMALLINT unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2460 DEFAULT CHARSET=utf8mb4;
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  FOREIGN KEY (`devId`) REFERENCES `devices`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
--- Create table
-create table App_User
-(
-  USER_ID           BIGINT not null,
-  USER_NAME         VARCHAR(36) not null,
-  ENCRYTED_PASSWORD VARCHAR(128) not null,
-  ENABLED           BIT not null 
-) ;
---  
-alter table App_User
-  add constraint APP_USER_PK primary key (USER_ID);
- 
-alter table App_User
-  add constraint APP_USER_UK unique (USER_NAME);
- 
- 
--- Create table
-create table App_Role
-(
-  ROLE_ID   BIGINT not null,
-  ROLE_NAME VARCHAR(30) not null
-) ;
---  
-alter table App_Role
-  add constraint APP_ROLE_PK primary key (ROLE_ID);
- 
-alter table App_Role
-  add constraint APP_ROLE_UK unique (ROLE_NAME);
- 
- 
--- Create table
-create table User_Role
-(
-  ID      BIGINT not null,
-  USER_ID BIGINT not null,
-  ROLE_ID BIGINT not null
-);
---  
-alter table User_Role
-  add constraint USER_ROLE_PK primary key (ID);
- 
-alter table User_Role
-  add constraint USER_ROLE_UK unique (USER_ID, ROLE_ID);
- 
-alter table User_Role
-  add constraint USER_ROLE_FK1 foreign key (USER_ID)
-  references App_User (USER_ID);
- 
-alter table User_Role
-  add constraint USER_ROLE_FK2 foreign key (ROLE_ID)
-  references App_Role (ROLE_ID);
- 
- 
--- Used by Spring Remember Me API.  
-CREATE TABLE Persistent_Logins (
- 
-    username varchar(64) not null,
-    series varchar(64) not null,
-    token varchar(64) not null,
-    last_used timestamp not null,
-    PRIMARY KEY (series)
-     
-);
- 
+
 
 --------------------------------------
 
@@ -198,14 +140,20 @@ values (2, 1, 2);
 
 insert into User_Role (ID, USER_ID, ROLE_ID)
 values (3, 2, 2);
+
 ---
 
+INSERT INTO `devices` 
+	(`address`, `type`, `serial`, `baudrate`, `hw_ver`, `fw_ver`, `mfg_year`, `min_voltage`, `max_voltage`, `current`, `comment`, `enabled`) 
+	VALUES ('11', '150', '5', '9600', '10', '10', '2019', '5', '24', '30', 'comment 1', true);
+    
+INSERT INTO `devices` 
+	(`address`, `type`, `serial`, `baudrate`, `hw_ver`, `fw_ver`, `mfg_year`, `min_voltage`, `max_voltage`, `current`, `comment`, `enabled`) 
+	VALUES ('12', '150', '6', '9600', '10', '10', '2019', '5', '24', '30', 'comment 2', true);
 
-INSERT INTO `mydatabase`.`devices` 
-	(`id`, `address`, `type`, `serial`, `baudrate`, `hw_ver`, `fw_ver`, `mfg_year`, `min_voltage`, `max_voltage`, `current`) 
-	VALUES ('3', '11', '150', '5', '9600', '10', '10', '2019', '5', '24', '30');
+---
 
-
--- Dump completed on 2019-08-30 13:36:29
-
+INSERT INTO `mlp_data` 
+	(`devId`, `anglex`, `angley`, `anglez`, `accel`, `anglemx`, `anglemy`, `anglemz`, `mag`, `tempcase`, `state`, `test`, `date_time`) 
+	VALUES ('1', '15000', '15000', '55', '9600', '10', '10', '19', '5', '24', '30', 1, current_time());
 

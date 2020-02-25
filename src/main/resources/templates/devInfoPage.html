@@ -37,7 +37,7 @@
 				<td th:utext="${deviceInfo.serial}">..</td>
 				<td th:utext="${deviceInfo.comment}">..</td>
 				<td th:if="${admin != null}"  >
-					<button th:onclick="'DeleteDevice(' + ${deviceInfo.devId} + ');'">Удалить</button>
+					<img th:src="@{/images/deletefromdb.png}" th:onclick="'DeleteDevice(' + ${deviceInfo.devId} + ');'" title='Удалить из БД'>
 				</td>
 			</tr>
 		</table>
@@ -53,6 +53,7 @@
 				<th>Тип устройства</th>
 				<th>Серийный номер</th>
 				<th>Комментарий</th>
+				<th th:if="${admin != null}"> </th>
 			</tr>
 			<tbody class="results"></tbody>
 		</table>

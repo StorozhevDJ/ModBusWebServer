@@ -1,0 +1,38 @@
+<configuration>
+
+    <logger name="org.apache.ibatis" level="INFO"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%c %d{yyyy.MM.dd HH:mm:ss.SSS} %-5p [%t] %c{1}: %m%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="debuglog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${catalina.base}/logs/modbuslogger.log</File>
+        <Append>true</Append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%c %d{yyyy.MM.dd HH:mm:ss.SSS} %-5p [%t] %c{1}: %m%n
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>{catalina.base}/logs/modbuslogger.%i.log.gz</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>3</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>3MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+    
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="debuglog"/>
+    </root>
+    
+
+</configuration>
